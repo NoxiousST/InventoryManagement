@@ -86,7 +86,7 @@ def item_based_category(request, category_id):
 def category_summary(request):
     data = Category.objects.annotate(
         jumlah_barang=Count('item'),
-        total_nilai_stok=Sum(F('item__quantity')),
+        total_nilai_stok=Sum(ExpressionWrapper(F('item__price') * F('item__quantity'), output_field=FloatField())),
         rata_rata_harga=Avg('item__price')
     ).values(
         'id', 'name', 'jumlah_barang', 'total_nilai_stok', 'rata_rata_harga'
